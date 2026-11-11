@@ -173,3 +173,45 @@ If trajectory **X** is scaled by factor *k*: **X**′ = *k***X**
 Then: *P*<sub>n</sub>(**X**′) = (*k*⟨*d*<sub>⊥</sub>⟩) / (*k* × *d*<sub>net</sub>) = *P*<sub>n</sub>(**X**)
 
 
+
+## Web interface
+
+A browser front end to the same analysis. `web/analysis.py` calls `io_utils.process_csv_file` exactly as the command
+line does; the browser draws the per-track tables, the track map, histograms and classification plots from the JSON
+it returns, and exports CSV.
+
+### Run the web app
+
+```bash
+pip install -r requirements-web.txt
+python run_web.py            # http://127.0.0.1:8106 (local only)
+```
+
+Pages: **Analyze** (choose a demo dataset or upload a track CSV with `track_number, frame, x, y`; set the method,
+minimum track length, sRg cutoff and linearity thresholds, and the pixel size in µm/pixel and frame interval in s/frame;
+run; export a per-track CSV or the CLI-format `_metrics.csv`), **Tracks** (sortable, filterable per-track table and a
+plot of each track), **Plots**, **Validation** (simulated tracks of known motion type and a live confusion matrix),
+and the method, manual and About pages rendered from this repository's markdown. Units only convert the displayed Rg,
+step length and duration: sRg, Dr, Pn and the classes are dimensionless.
+
+Demo datasets: the experimental tracks in `alfredo_sRg/data/` (6,796 tracks, 80,645 localisations; pixel size
+0.108 µm from the file's `x [nm]` column) and 250 simulated tracks from the repo's own generator
+(`testing/trajectory_sim.py`, seed 42; five motion types, 50 tracks each).
+
+### Static site (GitHub Pages)
+
+`python scripts/build_static.py --out site` exports the same front end with the demo datasets analysed by the Python
+code at build time; `.github/workflows/pages.yml` publishes it on every push to main (Settings → Pages → Source:
+GitHub Actions). On the static site, threshold changes are re-applied in the browser to the precomputed Python metrics,
+and an uploaded CSV can be analysed with the simple method by `web/static/engine.js`, a JS port tested against the
+Python output (`web/static/engine.test.mjs`); the tensor method on your own files and the CLI-format CSV need the
+local app.
+
+Tests: `python -m pytest -q tests/test_web.py` (API, static build, Python/JS agreement);
+smoke test and screenshots: `python scripts/screenshots.py --static "" analyze tracks plots validate`.
+
+![Home](docs/img/home.png)
+![Analyze](docs/img/analyze.png)
+![Plots](docs/img/plots.png)
+![One track](docs/img/tracks_8.png)
+![Validation](docs/img/validate.png)
