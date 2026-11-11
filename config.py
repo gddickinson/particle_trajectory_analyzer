@@ -31,14 +31,14 @@ LINEAR_PERPENDICULAR_CUTOFF = 0.15
 
 # Analysis options
 RG_METHOD = 'simple'
-INCLUDE_SHAPE_METRICS = False
-INCLUDE_LINEAR_METRICS = False
+INCLUDE_SHAPE_METRICS = True   # asymmetry, skewness, kurtosis (tensor method only)
+INCLUDE_LINEAR_METRICS = True  # directionality / perpendicular or eigenvalue metrics (README 5.1)
 
 # Output options
 OUTPUT_SUFFIX = '_metrics'
 SPLIT_OUTPUTS = False
 GENERATE_STATS = False
-MOBILE_ONLY = True
+MOBILE_ONLY = True  # split outputs: mobile tracks only (manual section 7: mobile_linear/ ...)
 OUTPUT_DIR = None
 
 

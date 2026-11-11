@@ -33,7 +33,7 @@ DEFAULTS = {
     "linear_step_alignment": config.LINEAR_STEP_ALIGNMENT_CUTOFF,
 }
 
-# Per-track columns written by process_csv_file (simple and tensor methods, all options on).
+# Per-track columns process_csv_file can write (which appear depends on the method and config.py's INCLUDE_* options).
 METRIC_COLUMNS = [
     "rg", "mean_step_length", "sRg", "mobility_classification", "linear_classification",
     "directionality_ratio", "mean_perpendicular_distance", "normalized_perpendicular_distance",
@@ -119,7 +119,7 @@ def run_pipeline(df: pd.DataFrame, params: dict, name: str = "upload"):
             merged = process_csv_file(
                 str(path), params["cutoff_len"], params["srg_cutoff"],
                 params["linear_eigenvalue_ratio"], params["linear_step_alignment"],
-                params["method"], True, True,
+                params["method"], config.INCLUDE_SHAPE_METRICS, config.INCLUDE_LINEAR_METRICS,
                 params["linear_directionality"], params["linear_perpendicular"],
             )
     text = log.getvalue().replace(str(Path(tmpdir)) + "/", "")

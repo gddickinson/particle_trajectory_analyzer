@@ -84,7 +84,10 @@ track_number,frame,x,y
 ### Defaults
 All analysis defaults live in `config.py` and are shared by the command line, direct execution and
 `io_utils.process_csv_file`: method `simple`, minimum length 3, sRg cutoff 2.222, directionality 0.8,
-perpendicular 0.15, eigenvalue ratio 20.0, step alignment 0.7. Command-line options override them.
+perpendicular 0.15, eigenvalue ratio 20.0, step alignment 0.7. Output options also come from `config.py`:
+shape and linear metrics included (`INCLUDE_SHAPE_METRICS = True`, `INCLUDE_LINEAR_METRICS = True`), split outputs
+off, statistics off, and split outputs limited to mobile tracks (`MOBILE_ONLY = True`; use `--all-tracks` on the
+command line to include immobile tracks). Command-line options override them.
 
 ### For Spyder/IDE Users
 1. Open `config.py`

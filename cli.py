@@ -99,25 +99,27 @@ def build_parser():
                         help=f"Perpendicular distance threshold, simple method (default: {config.LINEAR_PERPENDICULAR_CUTOFF})")
     parser.add_argument('--method', choices=['simple', 'tensor'], default=config.RG_METHOD,
                         help=f"Method to calculate Rg (default: {config.RG_METHOD})")
-    parser.add_argument('--include-shape-metrics', action='store_true', default=True,
-                        help="Include shape metrics in output")
+    parser.add_argument('--include-shape-metrics', action='store_true', default=config.INCLUDE_SHAPE_METRICS,
+                        help=f"Include shape metrics in output (default: {config.INCLUDE_SHAPE_METRICS})")
     parser.add_argument('--no-shape-metrics', action='store_false',
                         dest='include_shape_metrics',
                         help="Do not include shape metrics in output")
-    parser.add_argument('--include-linear-metrics', action='store_true', default=True,
-                        help="Include linear motion metrics in output")
+    parser.add_argument('--include-linear-metrics', action='store_true', default=config.INCLUDE_LINEAR_METRICS,
+                        help=f"Include linear motion metrics in output (default: {config.INCLUDE_LINEAR_METRICS})")
     parser.add_argument('--no-linear-metrics', action='store_false',
                         dest='include_linear_metrics',
                         help="Do not include linear motion metrics in output")
-    parser.add_argument('--suffix', default='_metrics',
-                        help="Suffix for output filenames (default: _metrics)")
-    parser.add_argument('--split-outputs', action='store_true', default=False,
+    parser.add_argument('--suffix', default=config.OUTPUT_SUFFIX,
+                        help=f"Suffix for output filenames (default: {config.OUTPUT_SUFFIX})")
+    parser.add_argument('--split-outputs', action='store_true', default=config.SPLIT_OUTPUTS,
                         help="Create separate files for different classifications")
-    parser.add_argument('--mobile-only', action='store_true', default=False,
-                        help="Only include mobile tracks in split outputs")
+    parser.add_argument('--mobile-only', action='store_true', default=config.MOBILE_ONLY,
+                        help=f"Only include mobile tracks in split outputs (default: {config.MOBILE_ONLY})")
+    parser.add_argument('--all-tracks', action='store_false', dest='mobile_only',
+                        help="Include immobile tracks in split outputs")
     parser.add_argument('--output-dir',
                         help="Directory for output files (default: same as input)")
-    parser.add_argument('--generate-stats', action='store_true', default=False,
+    parser.add_argument('--generate-stats', action='store_true', default=config.GENERATE_STATS,
                         help="Generate statistics summary file")
     return parser
 
