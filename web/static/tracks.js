@@ -76,6 +76,6 @@ async function detail(r, id) {
     <div class="two"><div class="panel">${coords ? trackSvg(coords, { unit: unitLabel(r.units) }) : '<p class="mute">No coordinates for this track.</p>'}
       <p class="small mute"><span style="color:#ffb02e">●</span> start · <span style="color:#ff4fd8">●</span> end · dashed: start-to-end line used by Dr and Pn. Image orientation (y down).</p></div>
     <div class="panel"><dl class="kv">${list(cols, c => `<dt>${esc(c.label)}</dt><dd>${cell(c, t)}</dd>`)}</dl>
-      <p class="small">sRg = ${f(t.sRg)} is ${num(t.sRg) < p.srg_cutoff ? 'below' : Number.isNaN(num(t.sRg)) ? 'not defined (so not below)' : 'at or above'} the cutoff ${f(p.srg_cutoff)} → ${esc(t.mobility_classification)}.<br>${why}</p></div></div>
+      <p class="small">sRg = ${f(t.sRg)} is ${Number.isNaN(num(t.sRg)) ? 'not defined' : num(t.sRg) < p.srg_cutoff ? 'below' : 'at or above'} the cutoff ${f(p.srg_cutoff)} → ${esc(t.mobility_classification)}.<br>${why}</p></div></div>
     <p>${nav(i - 1, '← Previous')} ${nav(i + 1, 'Next →')} <a class="btn alt" href="#/tracks">All tracks</a></p>`;
 }

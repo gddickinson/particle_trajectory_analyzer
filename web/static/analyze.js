@@ -122,6 +122,7 @@ function show(r) {
   <div class="scroll"><table><thead><tr><th>linear class</th><th>mobile</th><th>immobile</th><th>all</th></tr></thead><tbody>
     ${list(lin, k => { const [m, i] = cross(k); return `<tr><td>${cls(k)}</td><td>${m}</td><td>${i}</td><td>${s[k]}</td></tr>`; })}
   </tbody></table></div>
+  ${s.mobility_unclassified ? `<p class="small mute">${s.mobility_unclassified} tracks have no defined sRg (fewer than 2 usable localisations or no movement): mobility unclassified.</p>` : ''}
   ${r.params.method === 'tensor' ? '<p class="small mute">Tensor method: linear tracks are split into unidirectional / bidirectional at Dr ≥ 0.7 (fixed in classification.py).</p>' : ''}
   <h3>Export</h3>
   <button type="button" id="x-tracks">Per-track CSV</button>

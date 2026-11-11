@@ -70,7 +70,7 @@ export function classifyTensor(eig, align, dr, eigCut, alignCut) {
   return dr >= 0.7 ? 'linear_unidirectional' : 'linear_bidirectional';
 }
 
-export const mobility = (srg, cut) => (srg < cut ? 'immobile' : 'mobile');
+export const mobility = (srg, cut) => (Number.isNaN(srg) ? 'unclassified' : srg < cut ? 'immobile' : 'mobile');
 
 // --- io_utils.process_csv_file (simple method) ----------------------------------------------------------------------
 // Points of one track in frame order, as process_csv_file builds its frame matrix: a later row for the same frame
@@ -160,10 +160,10 @@ export function applyParams(result, params) {
 
 // Track counts by class (the analysed tracks only).
 export function summarize(tracks) {
-  const s = { n: tracks.length, mobile: 0, immobile: 0, linear_unidirectional: 0, linear_bidirectional: 0, non_linear: 0, linear: 0, unclassified: 0,
+  const s = { n: tracks.length, mobile: 0, immobile: 0, mobility_unclassified: 0, linear_unidirectional: 0, linear_bidirectional: 0, non_linear: 0, linear: 0, unclassified: 0,
     mobile_linear: 0, mobile_nonlinear: 0 };
   for (const t of tracks) {
-    s[t.mobility_classification]++;
+    s[t.mobility_classification === 'unclassified' ? 'mobility_unclassified' : t.mobility_classification]++;
     s[t.linear_classification]++;
     if (t.mobility_classification === 'mobile') {
       if (t.linear_classification.startsWith('linear')) s.mobile_linear++;

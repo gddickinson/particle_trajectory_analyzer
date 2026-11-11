@@ -136,3 +136,16 @@ class TestFileStatistics:
         assert s['total_tracks'] == 4 and s['analysed_tracks'] == 3 and s['short_tracks'] == 1
         assert s['mobile_tracks'] + s['immobile_tracks'] == 3
         assert abs(s['pct_mobile'] + s['pct_immobile'] - 100) < 1e-9
+
+
+class TestUndefinedSrg:
+    """Tracks whose sRg is undefined are not classified as mobile."""
+
+    def test_stationary_track_not_mobile(self, tmp_path):
+        df = pd.DataFrame({'track_number': 1, 'frame': range(6), 'x': 2.0, 'y': 3.0})
+        path = tmp_path / "still.csv"
+        df.to_csv(path, index=False)
+        for method in ('simple', 'tensor'):
+            out = process_csv_file(str(path), cutoff_len=3, method=method)
+            assert np.isnan(out['sRg'].iloc[0])
+            assert out['mobility_classification'].iloc[0] == 'unclassified'

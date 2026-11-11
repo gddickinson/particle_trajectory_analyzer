@@ -147,7 +147,12 @@ def process_csv_file(file_path, cutoff_len=None, sRg_cutoff=None,
                 )
 
             srg_value = get_scaled_rg(rg, mean_step)
-            mobility_classification = 'immobile' if srg_value < sRg_cutoff else 'mobile'
+            # sRg is undefined (NaN) for tracks with fewer than 2 usable localisations or
+            # no movement at all; such tracks are not called mobile.
+            if np.isnan(srg_value):
+                mobility_classification = 'unclassified'
+            else:
+                mobility_classification = 'immobile' if srg_value < sRg_cutoff else 'mobile'
 
             result = {
                 'track_number': track_num,

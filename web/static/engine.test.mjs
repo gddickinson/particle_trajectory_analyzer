@@ -53,7 +53,8 @@ for (const method of ['simple', 'tensor']) {
 
 // 3. Counts and CSV parsing details.
 const s = summarize(py);
-assert.equal(s.mobile + s.immobile, py.length);
+assert.equal(s.mobile + s.immobile + s.mobility_unclassified, py.length);
+assert.ok(py.some(t => t.mobility_classification === "unclassified"), "fixture has a track with undefined sRg");
 assert.deepEqual(parseCsv('a,b\n"x, ""y""",2\r\n3,\n').rows, [['x, "y"', '2'], ['3', '']]);
 assert.throws(() => analyseSimple(parseCsv('track_number,frame,x\n1,0,1\n'), fx.params), /Missing required columns: y/);
 

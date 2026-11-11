@@ -49,7 +49,7 @@ async function draw(info) {
 function matrix(base, p) {
   const r = applyParams(base, p);
   const types = [...new Set(r.tracks.map(t => t.label))];
-  const out = t => (t.mobility_classification === 'immobile' ? 'immobile' : t.linear_classification);
+  const out = t => (t.mobility_classification === 'mobile' ? t.linear_classification : t.mobility_classification);
   const cols = OUT.filter(c => r.tracks.some(t => out(t) === c) || ['immobile', 'linear_unidirectional', 'linear_bidirectional', 'non_linear'].includes(c));
   const n = (ty, c) => r.tracks.filter(t => t.label === ty && out(t) === c).length;
   const shade = (k, frac) => `background:color-mix(in srgb, ${COLORS[k]} ${Math.round(45 * frac)}%, transparent)`;
