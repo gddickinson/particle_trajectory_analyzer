@@ -398,12 +398,13 @@ def collect_file_statistics(df, filename, stats_data):
             stats_data[filename]['se_step_length_mobile'] = mobile_step.sem()
 
 
-def generate_stats_file(stats_data, directory_path):
+def generate_stats_file(stats_data, directory_path, output_dir=None):
     """Generate a statistics summary file from collected data.
 
     Args:
         stats_data: Dictionary containing statistics data
-        directory_path: Path to save the stats file
+        directory_path: Input directory; the file goes to its 'results' subdirectory
+        output_dir: If given, the file goes here instead (next to the _metrics files)
     """
     if not stats_data:
         print("No statistics data available")
@@ -420,7 +421,7 @@ def generate_stats_file(stats_data, directory_path):
 
     stats_df.loc['AGGREGATE'] = pd.Series(aggregate_stats)
 
-    output_path = Path(directory_path) / 'results'
+    output_path = Path(output_dir) if output_dir else Path(directory_path) / 'results'
     output_path.mkdir(parents=True, exist_ok=True)
     stats_file = output_path / 'experiment_statistics.csv'
     stats_df.to_csv(stats_file)
@@ -489,6 +490,6 @@ def process_directory(directory_path, cutoff_len=None, sRg_cutoff=None,
             )
 
     if generate_stats and stats_data:
-        generate_stats_file(stats_data, directory_path)
+        generate_stats_file(stats_data, directory_path, output_dir)
 
     print("Batch processing complete.")

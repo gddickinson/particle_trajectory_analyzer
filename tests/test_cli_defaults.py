@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import pytest
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -65,3 +66,36 @@ def test_direct_execution_without_path_does_not_crash(monkeypatch, capsys):
     monkeypatch.setattr(config, 'EXECUTION_MODE', 'directory')
     cli.main([])
     assert 'No input path given' in capsys.readouterr().out
+
+
+def test_output_options_follow_readme_and_config():
+    """README 5.1: INCLUDE_LINEAR_METRICS = True; the CLI's output defaults come from config.py."""
+    assert config.INCLUDE_LINEAR_METRICS is True
+    a = cli.build_parser().parse_args(['--file', 'x.csv'])
+    assert a.include_shape_metrics == config.INCLUDE_SHAPE_METRICS
+    assert a.include_linear_metrics == config.INCLUDE_LINEAR_METRICS
+    assert a.mobile_only == config.MOBILE_ONLY
+    b = cli.build_parser().parse_args(['--file', 'x.csv', '--no-linear-metrics', '--no-shape-metrics', '--all-tracks'])
+    assert not (b.include_linear_metrics or b.include_shape_metrics or b.mobile_only)
+
+
+def test_web_reads_output_options_from_config(tmp_path, monkeypatch):
+    from web.analysis import DEFAULTS, analyse
+    df = pd.read_csv(_tracks_csv(tmp_path))
+    monkeypatch.setattr(config, 'INCLUDE_SHAPE_METRICS', False)
+    res, _ = analyse(df, dict(DEFAULTS, method='tensor'), 't.csv', with_coords=False)
+    assert 'asymmetry' not in res['columns']
+    monkeypatch.setattr(config, 'INCLUDE_SHAPE_METRICS', True)
+    res, _ = analyse(df, dict(DEFAULTS, method='tensor'), 't.csv', with_coords=False)
+    assert 'asymmetry' in res['columns']
+
+
+@pytest.mark.parametrize("mode", ["file", "directory"])
+def test_output_dir_holds_stats_file(tmp_path, mode):
+    path = _tracks_csv(tmp_path)
+    out = tmp_path / 'out'
+    target = str(path) if mode == 'file' else str(tmp_path)
+    cli.main([f'--{mode}', target, '--output-dir', str(out), '--generate-stats'])
+    assert (out / 'tracks_metrics.csv').exists()
+    assert (out / 'experiment_statistics.csv').exists()
+    assert not (tmp_path / 'results').exists()

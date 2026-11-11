@@ -260,6 +260,8 @@ input_directory/
     └── mobile_linear/
         └── data_mobile_linear.csv (if --split-outputs)
 ```
+With `--output-dir DIR`, all of these (including `experiment_statistics.csv`) are written to `DIR` instead of
+`results/`.
 
 ### Main Output File (*_metrics.csv)
 Contains all original data plus:
@@ -305,7 +307,7 @@ Summary statistics across all files:
 # Process entire directory
 python trajectory_analyzer.py --directory ./data --method simple
 
-# With custom output directory
+# With custom output directory (metrics, split files and statistics all go there)
 python trajectory_analyzer.py --directory ./data --output-dir ./analysis
 ```
 

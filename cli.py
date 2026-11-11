@@ -61,7 +61,7 @@ def run_script(mode, path, cutoff_len=None, sRg_cutoff=None,
                 mobile_only, output_dir, stats_data
             )
             if generate_stats and stats_data:
-                generate_stats_file(stats_data, os.path.dirname(path))
+                generate_stats_file(stats_data, os.path.dirname(path), output_dir)
     elif mode == 'directory':
         process_directory(
             path, cutoff_len, sRg_cutoff,
