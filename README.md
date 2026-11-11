@@ -91,7 +91,10 @@ The simple method has computational complexity O(*N*) per trajectory, compared t
 
 ### 3.3 Handling Measurement Gaps
 
-For trajectories with missing frames, positions are interpolated using linear interpolation when gaps are ≤3 frames. Larger gaps are preserved as NaN values and excluded from calculations.
+Trajectories may have missing frames. Missing frames (and localisations with a missing coordinate) are not
+interpolated: they are left out, and all metrics are computed from the remaining localisations in frame order, so a
+step across a gap joins the localisations on either side of it. The minimum-length cutoff counts localisations (rows),
+not frames spanned.
 
 ## 4. Parameter Selection Guidelines
 
@@ -116,7 +119,7 @@ For trajectories with missing frames, positions are interpolated using linear in
 
 ### 4.3 Minimum Trajectory Length
 
-**Cutoff Length**: Default = 3 frames
+**Cutoff Length**: Default = 3 localisations (rows of the track)
 - Minimum required for meaningful geometric analysis
 - Longer trajectories (≥10 frames) provide more reliable classification
 

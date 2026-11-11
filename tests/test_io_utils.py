@@ -100,3 +100,19 @@ class TestProcessCSVFile:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+class TestGapsNotInterpolated:
+    """Missing frames are skipped (as the README says), not interpolated."""
+
+    def test_gap_equals_track_without_gap_rows(self, tmp_path):
+        xs = [0.0, 1.0, 2.5, 2.0, 4.0]
+        gap = pd.DataFrame({'track_number': 1, 'frame': [0, 1, 5, 6, 9], 'x': xs, 'y': [0.0, 0.5, 0.2, 1.0, 0.3]})
+        dense = gap.assign(frame=range(5))
+        out = []
+        for name, df in (('gap', gap), ('dense', dense)):
+            path = tmp_path / f"{name}.csv"
+            df.to_csv(path, index=False)
+            out.append(process_csv_file(str(path), cutoff_len=3, method='simple').iloc[0])
+        for col in ('rg', 'mean_step_length', 'sRg', 'directionality_ratio', 'normalized_perpendicular_distance'):
+            assert out[0][col] == out[1][col]

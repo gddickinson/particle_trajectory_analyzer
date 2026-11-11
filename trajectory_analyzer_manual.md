@@ -73,7 +73,8 @@ track_number,frame,x,y
 
 ### Important Notes
 - Coordinates should be in consistent units (pixels, nm, μm)
-- Frame numbers can have gaps (missing observations)
+- Frame numbers can have gaps (missing observations). Gaps are not interpolated: the missing frames are
+  skipped and steps join the localisations on either side of a gap
 - Each track should have at least 3 points
 
 ---
