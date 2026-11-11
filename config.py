@@ -40,3 +40,12 @@ SPLIT_OUTPUTS = False
 GENERATE_STATS = False
 MOBILE_ONLY = True
 OUTPUT_DIR = None
+
+
+def resolve(value, name):
+    """Return value, or this module's default `name` when value is None.
+
+    config.py is the single source of the analysis defaults for the CLI,
+    direct execution and io_utils.process_csv_file / process_directory.
+    """
+    return globals()[name] if value is None else value

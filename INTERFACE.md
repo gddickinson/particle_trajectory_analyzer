@@ -3,7 +3,7 @@
 ## Analysis (Python, flat modules at the repo root)
 | File | Contents |
 |------|----------|
-| `config.py` | Default parameters (CUTOFF_LEN, SRG_CUTOFF, linear thresholds, RG_METHOD, output options). Single source of the analysis defaults for the CLI, direct execution, io_utils and the web app. |
+| `config.py` | `resolve(value, name)` (None -> default) and default parameters (CUTOFF_LEN, SRG_CUTOFF, linear thresholds, RG_METHOD, output options). Single source of the analysis defaults for the CLI, direct execution, io_utils and the web app. |
 | `metrics.py` | `get_radius_of_gyration_simple`, `get_trajectory_metrics_tensor`, `get_mean_step_length`, `get_scaled_rg`, `calculate_step_angle_variation`. |
 | `classification.py` | `classify_linear_motion_simple` (Dr, Pn), `classify_linear_motion` (eigenvalue ratio, step alignment). |
 | `io_utils.py` | `validate_csv_columns`, `process_csv_file` (the pipeline: per-track metrics merged onto the rows), `save_processed_data`, `collect_file_statistics`, `generate_stats_file`, `process_directory`. Imports metrics + classification. |

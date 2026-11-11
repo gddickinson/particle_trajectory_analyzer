@@ -16,16 +16,7 @@ from metrics import (
     get_scaled_rg,
 )
 from classification import classify_linear_motion_simple, classify_linear_motion
-import config
-
-
-def _cfg(value, name):
-    """Return value, or the default from config.py when value is None.
-
-    config.py is the single source of the analysis defaults for the CLI,
-    direct execution and the functions below.
-    """
-    return getattr(config, name) if value is None else value
+from config import resolve as _cfg
 
 
 def validate_csv_columns(df, required_cols=None):
