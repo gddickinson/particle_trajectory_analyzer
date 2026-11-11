@@ -138,7 +138,10 @@ def test_engine_fixture_matches_python():
     import make_engine_fixture
     fresh = make_engine_fixture.build()
     stored = json.loads((ROOT / "tests" / "fixtures" / "engine_cases.json").read_text())
-    assert stored["csv"] == fresh["csv"]
+    # Numbers, not text: libm differs in the last digit between macOS and Linux (CI)
+    a = pd.read_csv(io.StringIO(stored["csv"]))
+    b = pd.read_csv(io.StringIO(fresh["csv"]))
+    pd.testing.assert_frame_equal(a, b, check_exact=False, rtol=1e-12, atol=1e-12)
     for m in ("simple", "tensor"):
         assert stored["runs"][m]["alt"] == fresh["runs"][m]["alt"]
         for s, f in zip(stored["runs"][m]["result"]["tracks"], fresh["runs"][m]["result"]["tracks"]):
