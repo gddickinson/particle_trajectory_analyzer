@@ -16,6 +16,16 @@ from metrics import (
     get_scaled_rg,
 )
 from classification import classify_linear_motion_simple, classify_linear_motion
+import config
+
+
+def _cfg(value, name):
+    """Return value, or the default from config.py when value is None.
+
+    config.py is the single source of the analysis defaults for the CLI,
+    direct execution and the functions below.
+    """
+    return getattr(config, name) if value is None else value
 
 
 def validate_csv_columns(df, required_cols=None):
@@ -40,16 +50,17 @@ def validate_csv_columns(df, required_cols=None):
     return True
 
 
-def process_csv_file(file_path, cutoff_len=3, sRg_cutoff=2.22236433588659,
-                     linear_eig_ratio_cutoff=5.0, linear_step_align_cutoff=0.7,
-                     method='tensor', include_shape_metrics=True,
+def process_csv_file(file_path, cutoff_len=None, sRg_cutoff=None,
+                     linear_eig_ratio_cutoff=None, linear_step_align_cutoff=None,
+                     method=None, include_shape_metrics=True,
                      include_linear_metrics=True,
-                     linear_directionality_cutoff=0.8,
-                     linear_perpendicular_cutoff=0.15):
+                     linear_directionality_cutoff=None,
+                     linear_perpendicular_cutoff=None):
     """Process a single CSV file to calculate trajectory metrics.
 
     Args:
         file_path: Path to CSV file
+        (Parameters left as None take their defaults from config.py.)
         cutoff_len: Minimum trajectory length
         sRg_cutoff: Threshold for mobile/immobile classification
         linear_eig_ratio_cutoff: Threshold for eigenvalue ratio (tensor method)
@@ -63,6 +74,13 @@ def process_csv_file(file_path, cutoff_len=3, sRg_cutoff=2.22236433588659,
     Returns:
         DataFrame with original data plus metrics columns, or None on error
     """
+    cutoff_len = _cfg(cutoff_len, 'CUTOFF_LEN')
+    sRg_cutoff = _cfg(sRg_cutoff, 'SRG_CUTOFF')
+    linear_eig_ratio_cutoff = _cfg(linear_eig_ratio_cutoff, 'LINEAR_EIGENVALUE_RATIO_CUTOFF')
+    linear_step_align_cutoff = _cfg(linear_step_align_cutoff, 'LINEAR_STEP_ALIGNMENT_CUTOFF')
+    method = _cfg(method, 'RG_METHOD')
+    linear_directionality_cutoff = _cfg(linear_directionality_cutoff, 'LINEAR_DIRECTIONALITY_CUTOFF')
+    linear_perpendicular_cutoff = _cfg(linear_perpendicular_cutoff, 'LINEAR_PERPENDICULAR_CUTOFF')
     print(f"Processing {file_path}")
     print(f"Using {method} method for Rg calculation")
 
@@ -408,14 +426,14 @@ def generate_stats_file(stats_data, directory_path):
     print(f"Saved statistics summary to {stats_file}")
 
 
-def process_directory(directory_path, cutoff_len=3, sRg_cutoff=2.22236433588659,
-                      linear_eig_ratio_cutoff=5.0, linear_step_align_cutoff=0.7,
-                      method='tensor', include_shape_metrics=True,
+def process_directory(directory_path, cutoff_len=None, sRg_cutoff=None,
+                      linear_eig_ratio_cutoff=None, linear_step_align_cutoff=None,
+                      method=None, include_shape_metrics=True,
                       include_linear_metrics=True,
                       suffix='_metrics', split_outputs=False, mobile_only=False,
                       output_dir=None, generate_stats=False,
-                      linear_directionality_cutoff=0.8,
-                      linear_perpendicular_cutoff=0.15):
+                      linear_directionality_cutoff=None,
+                      linear_perpendicular_cutoff=None):
     """Process all CSV files in a directory.
 
     Args:

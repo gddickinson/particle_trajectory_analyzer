@@ -123,8 +123,11 @@ For trajectories with missing frames, positions are interpolated using linear in
 
 ### 5.1 Configuration for Simple Method
 
+These are the defaults in `config.py`, the single source of defaults for the command line, direct execution and
+`io_utils.process_csv_file` (command-line options override them):
+
 ```python
-# In CONFIG section of trajectory_analyzer.py
+# In config.py
 RG_METHOD = 'simple'  # Use geometric method
 LINEAR_DIRECTIONALITY_CUTOFF = 0.8  # Directionality threshold
 LINEAR_PERPENDICULAR_CUTOFF = 0.15  # Perpendicular distance threshold

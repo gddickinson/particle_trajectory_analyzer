@@ -48,7 +48,7 @@ python run_web.py            # http://127.0.0.1:8106</pre>
   <p>From <code>config.py</code>: method ${esc(info.defaults.method)}, minimum length ${info.defaults.cutoff_len},
     sRg cutoff ${info.defaults.srg_cutoff}, θD ${info.defaults.linear_directionality}, θP ${info.defaults.linear_perpendicular},
     eigenvalue ratio ${info.defaults.linear_eigenvalue_ratio}, step alignment ${info.defaults.linear_step_alignment}.
-    (The command line's own defaults differ: <code>--method tensor</code> and <code>--linear-eigenvalue-ratio 5.0</code>.)</p>
+    The command line and <code>io_utils.process_csv_file</code> use the same defaults.</p>
   <h2>Credits</h2>
   <p>The simple Rg and sRg method was adapted from R code by J. Alfredo Freites (alfredo_sRg/); the scaled radius of gyration
     follows Golan and Sherman, Nature Communications 2017. Code by George Dickinson, MIT licence.

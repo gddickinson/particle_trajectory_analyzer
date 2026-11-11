@@ -80,16 +80,22 @@ track_number,frame,x,y
 
 ## 4. Quick Start Guide
 
+### Defaults
+All analysis defaults live in `config.py` and are shared by the command line, direct execution and
+`io_utils.process_csv_file`: method `simple`, minimum length 3, sRg cutoff 2.222, directionality 0.8,
+perpendicular 0.15, eigenvalue ratio 20.0, step alignment 0.7. Command-line options override them.
+
 ### For Spyder/IDE Users
-1. Open `trajectory_analyzer.py`
-2. Edit the CONFIG section:
+1. Open `config.py`
+2. Edit the settings (they are used when the script runs without command-line arguments):
    ```python
    USE_DIRECT_EXECUTION = True
    EXECUTION_MODE = 'file'  # or 'directory'
    FILE_PATH = r"path/to/your/data.csv"
    RG_METHOD = 'simple'  # or 'tensor'
    ```
-3. Run the script (F5 in Spyder)
+3. Run `cli.py` or `trajectory_analyzer.py` (F5 in Spyder). With `USE_DIRECT_EXECUTION = True` and no
+   command-line arguments, these settings are used; any command-line arguments take precedence.
 
 ### For Command Line Users
 ```bash
@@ -109,7 +115,7 @@ The simple method uses geometric calculations to classify trajectories without m
 
 ### Key Parameters
 
-#### In CONFIG Section:
+#### In config.py:
 ```python
 # Method selection
 RG_METHOD = 'simple'
@@ -175,7 +181,7 @@ The tensor method uses eigenvalue decomposition of the gyration tensor to charac
 
 ### Key Parameters
 
-#### In CONFIG Section:
+#### In config.py:
 ```python
 # Method selection
 RG_METHOD = 'tensor'
