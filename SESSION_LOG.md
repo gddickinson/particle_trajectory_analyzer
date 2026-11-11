@@ -31,3 +31,12 @@
   False, and README 5.1 shows INCLUDE_LINEAR_METRICS = True. Also testing/trajectory_generator.py uses its own
   thresholds (eigenvalue ratio 5.0, directionality 0.7) for its study; untouched. Stats files go to <input>/results
   even with --output-dir (unchanged).
+
+## 2026-11-11 (later still): output options and --output-dir (approved by George)
+- config.py output options now follow README 5.1: INCLUDE_LINEAR_METRICS = True; INCLUDE_SHAPE_METRICS = True (manual
+  section 7 lists the shape columns in the main output); MOBILE_ONLY kept True (manual section 7 documents mobile_*
+  split folders). The CLI's output-option defaults and the web app's INCLUDE_* now come from config.py; new
+  `--all-tracks` turns mobile-only off. Effect: with --split-outputs the CLI now writes mobile_* instead of all_*
+  folders by default; metrics output and web demo exports are unchanged.
+- `--output-dir` / OUTPUT_DIR now also receives experiment_statistics.csv (was always <input>/results).
+- Regression tests in tests/test_cli_defaults.py (failed before the fixes). All KIT.md checks re-run: pass.
