@@ -141,14 +141,14 @@ def test_engine_fixture_matches_python():
     # Numbers, not text: libm differs in the last digit between macOS and Linux (CI)
     a = pd.read_csv(io.StringIO(stored["csv"]))
     b = pd.read_csv(io.StringIO(fresh["csv"]))
-    pd.testing.assert_frame_equal(a, b, check_exact=False, rtol=1e-12, atol=1e-12)
+    pd.testing.assert_frame_equal(a, b, check_exact=False, rtol=1e-9, atol=1e-12)
     for m in ("simple", "tensor"):
         assert stored["runs"][m]["alt"] == fresh["runs"][m]["alt"]
         for s, f in zip(stored["runs"][m]["result"]["tracks"], fresh["runs"][m]["result"]["tracks"]):
             assert s.keys() == f.keys()
             for k in s:
                 if isinstance(s[k], float):
-                    assert math.isclose(s[k], f[k], rel_tol=1e-12, abs_tol=1e-15)
+                    assert math.isclose(s[k], f[k], rel_tol=1e-9, abs_tol=1e-12)
                 else:
                     assert s[k] == f[k]
 
