@@ -125,6 +125,7 @@ def test_real_demo_counts_and_pixel_size():
     res = client.get("/api/demo/real/simple").json()
     assert len(res["tracks"]) == 4819  # tracks with >= 3 localisations
     assert res["stats"]["total_tracks"] == 6796
+    assert res["stats"]["analysed_tracks"] == 4819 and res["stats"]["short_tracks"] == 1977
 
 
 def test_synthetic_is_reproducible():

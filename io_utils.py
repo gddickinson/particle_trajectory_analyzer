@@ -318,15 +318,20 @@ def collect_file_statistics(df, filename, stats_data):
     if filename not in stats_data:
         stats_data[filename] = {}
 
+    # total_tracks: every track in the file; analysed_tracks: those that met the
+    # length cutoff and got metrics. Mobility percentages are of analysed tracks.
     total_tracks = df['track_number'].nunique()
     stats_data[filename]['total_tracks'] = total_tracks
 
     if 'mobility_classification' in df.columns:
         track_mobility = df.groupby('track_number')['mobility_classification'].first()
+        analysed_tracks = int(track_mobility.notna().sum())
+        stats_data[filename]['analysed_tracks'] = analysed_tracks
+        stats_data[filename]['short_tracks'] = total_tracks - analysed_tracks
         mobile_tracks = (track_mobility == 'mobile').sum()
         immobile_tracks = (track_mobility == 'immobile').sum()
-        pct_mobile = (mobile_tracks / total_tracks) * 100 if total_tracks > 0 else 0
-        pct_immobile = (immobile_tracks / total_tracks) * 100 if total_tracks > 0 else 0
+        pct_mobile = (mobile_tracks / analysed_tracks) * 100 if analysed_tracks > 0 else 0
+        pct_immobile = (immobile_tracks / analysed_tracks) * 100 if analysed_tracks > 0 else 0
         stats_data[filename]['mobile_tracks'] = mobile_tracks
         stats_data[filename]['immobile_tracks'] = immobile_tracks
         stats_data[filename]['pct_mobile'] = pct_mobile

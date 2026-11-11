@@ -129,7 +129,7 @@ function show(r) {
   <button type="button" class="alt" id="x-json">Result JSON</button>
   ${csvOk ? '' : `<p class="small mute">${isStatic() ? 'The per-localisation _metrics.csv (as the CLI writes it) needs the local app.' : 'Run the analysis to enable the per-localisation _metrics.csv (as the CLI writes it).'}</p>`}
   ${r.stats ? `<details><summary>Statistics as written by <code>--generate-stats</code> (io_utils.collect_file_statistics)</summary>
-    <p class="small mute">As in the CLI's experiment_statistics.csv, total_tracks includes tracks shorter than the cutoff and the linear percentages are of mobile tracks.</p>
+    <p class="small mute">As in the CLI's experiment_statistics.csv: total_tracks counts every track in the file, analysed_tracks those that met the length cutoff (short_tracks the rest); mobility percentages are of analysed tracks, linear percentages of mobile tracks.</p>
     <div class="scroll"><table><tbody>${list(Object.entries(r.stats), ([k, v]) => `<tr><td>${esc(k)}</td><td class="mono">${f(v, 5)}</td></tr>`)}</tbody></table></div></details>`
     : '<p class="small mute">Python statistics (collect_file_statistics) are shown for Python runs with unchanged parameters.</p>'}
   ${r.log?.length ? `<details><summary>Pipeline log</summary><pre>${esc(r.log.join('\n'))}</pre></details>` : ''}

@@ -286,7 +286,9 @@ Creates separate files for different classifications:
 
 ### Statistics File (experiment_statistics.csv)
 Summary statistics across all files:
-- Track counts by classification
+- Track counts: `total_tracks` (every track in the file), `analysed_tracks` (tracks that met the
+  minimum length and got metrics) and `short_tracks` (the rest), then counts by classification
+- `pct_mobile` / `pct_immobile` are percentages of analysed tracks; linear percentages are of mobile tracks
 - Mean ± SE for all metrics
 - Percentage breakdowns
 - Aggregate statistics

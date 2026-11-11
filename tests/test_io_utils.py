@@ -116,3 +116,23 @@ class TestGapsNotInterpolated:
             out.append(process_csv_file(str(path), cutoff_len=3, method='simple').iloc[0])
         for col in ('rg', 'mean_step_length', 'sRg', 'directionality_ratio', 'normalized_perpendicular_distance'):
             assert out[0][col] == out[1][col]
+
+
+class TestFileStatistics:
+    """collect_file_statistics reports all tracks and analysed tracks separately."""
+
+    def test_short_tracks_counted_separately(self, tmp_path):
+        from io_utils import collect_file_statistics
+        rng = np.random.default_rng(3)
+        rows = [{'track_number': t, 'frame': f, 'x': rng.normal(), 'y': rng.normal()}
+                for t in range(3) for f in range(10)]
+        rows += [{'track_number': 9, 'frame': f, 'x': 0.0, 'y': float(f)} for f in range(2)]  # below cutoff
+        path = tmp_path / "s.csv"
+        pd.DataFrame(rows).to_csv(path, index=False)
+        df = process_csv_file(str(path), cutoff_len=3, method='simple')
+        stats = {}
+        collect_file_statistics(df, 's', stats)
+        s = stats['s']
+        assert s['total_tracks'] == 4 and s['analysed_tracks'] == 3 and s['short_tracks'] == 1
+        assert s['mobile_tracks'] + s['immobile_tracks'] == 3
+        assert abs(s['pct_mobile'] + s['pct_immobile'] - 100) < 1e-9
